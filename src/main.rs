@@ -4,28 +4,31 @@ fn main() {
 
     let sund = sundaram(100);
     println!("sundaram: {sund:?}");
+
+    let atkin = atkin(100);
+    println!("atkin: {atkin:?}");
 }
 
 // https://www.baeldung.com/cs/prime-number-algorithms
 
 // Sieve of Eratosthenes
 fn eratosthenes(target: usize) -> Vec<usize> {
-    let mut pr_ind = vec![true; target];
+    let mut bool_vec = vec![true; target];
 
     let sq = (target as f64).sqrt().floor() as usize;
 
     for n in 2..sq {
-        if pr_ind[n] {
+        if bool_vec[n] {
             let mut j = n * n;
 
             while j < target {
-                pr_ind[j] = false;
+                bool_vec[j] = false;
                 j += n
             }
         }
     }
 
-    pr_ind
+    bool_vec
         .into_iter()
         .enumerate()
         .filter_map(|(i, b)| if b { Some(i) } else { None })
@@ -36,7 +39,7 @@ fn eratosthenes(target: usize) -> Vec<usize> {
 
 fn sundaram(n: usize) -> Vec<usize> {
     let k = (n - 1) / 2;
-    let mut pr_ind = vec![true; k + 1];
+    let mut bool_vec = vec![true; k + 1];
 
     let sq = (k as f64).sqrt().floor() as usize;
 
@@ -44,12 +47,12 @@ fn sundaram(n: usize) -> Vec<usize> {
         let mut j = i;
 
         while i + j + 2 * i * j <= k {
-            pr_ind[i + j + 2 * i * j] = false;
+            bool_vec[i + j + 2 * i * j] = false;
             j += 1
         }
     }
 
-    let true_indices = pr_ind
+    let true_indices = bool_vec
         .into_iter()
         .enumerate()
         .filter_map(|(i, b)| if b { Some(i) } else { None })
@@ -63,13 +66,56 @@ fn sundaram(n: usize) -> Vec<usize> {
 // Sieve of Atkin
 
 fn atkin(n: usize) -> Vec<usize> {
-    let sieve = vec![1, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 49, 53, 59];
+    let comparison_nums = vec![1, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 49, 53, 59];
 
-    let mut pr_ind = vec![true; n];
+    let mut bool_vec = vec![true; n];
 
     let sq = (n as f64).sqrt().floor() as usize;
 
-    for x in 11..sq {}
+    for x in 1..sq {
+        for y in (1..sq).step_by(2) {
+            let m = 4 * x.pow(2) + y.pow(2);
+            let m_mod = m % 60;
+            let nums = [1, 13, 17, 29, 37, 41, 49, 53];
+            if m <= n && nums.iter().any(|e| e == &m_mod) {
+                bool_vec[m] = !bool_vec[m];
+            }
+        }
+    }
+
+    for x in (1..sq).step_by(2) {
+        for y in (2..sq).step_by(2) {
+            let m = 3 * x.pow(2) + y.pow(2);
+            let m_mod = m % 60;
+            let nums = [7, 19, 31, 43];
+            if m <= n && nums.iter().any(|e| e == &m_mod) {
+                bool_vec[m] = !bool_vec[m];
+            }
+        }
+    }
+
+    for x in 2..sq {
+        for y in ((x - 1)..1).step_by(2).rev() {
+            let m = 3 * x.pow(2) + y.pow(2);
+            let m_mod = m % 60;
+            let nums = [11, 23, 47, 59];
+            if m <= n && nums.iter().any(|e| e == &m_mod) {
+                bool_vec[m] = !bool_vec[m];
+            }
+        }
+    }
+
+    let mut m_vec = vec![];
+    for (w, s) in (0..(n / 60)).zip(comparison_nums.iter()) {
+        m_vec.push(60 * w + s);
+    }
+
+    for m in m_vec {
+        if m == 1 && m.pow(2) > n {
+            break;
+        } else {
+        }
+    }
 
     unimplemented!()
 }
