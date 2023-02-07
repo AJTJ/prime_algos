@@ -105,19 +105,26 @@ fn atkin(n: usize) -> Vec<usize> {
         }
     }
 
+    let w_range = 0..(n / 60);
+
+    println!("w_range: {w_range:?}");
+
     let mut m_vec = vec![];
-    for (w, s) in (0..(n / 60)).zip(comparison_nums.iter()) {
+    for (w, s) in w_range.zip(comparison_nums.iter()) {
+        println!("W: {w}, S: {s}");
         m_vec.push(60 * w + s);
     }
 
     for m in m_vec.iter() {
-        if m == &1 && m.pow(2) > n {
+        println!("M: {m}, POW: {}", m.pow(2));
+        if m.pow(2) > n {
             break;
-        } else {
+        } else if m != &1 {
             let mm = m.pow(2);
             if bool_vec[*m] {
                 for r in m_vec.iter() {
                     let c = mm * r;
+                    print!("C: {c}");
                     if c > n {
                         break;
                     } else {
@@ -135,7 +142,7 @@ fn atkin(n: usize) -> Vec<usize> {
         .collect::<Vec<_>>();
 
     let mut primes = vec![2, 3, 5];
-    primes.extend(true_indices.iter().copied());
+    primes.extend(true_indices.iter());
 
     primes
 }
