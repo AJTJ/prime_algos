@@ -110,12 +110,32 @@ fn atkin(n: usize) -> Vec<usize> {
         m_vec.push(60 * w + s);
     }
 
-    for m in m_vec {
-        if m == 1 && m.pow(2) > n {
+    for m in m_vec.iter() {
+        if m == &1 && m.pow(2) > n {
             break;
         } else {
+            let mm = m.pow(2);
+            if bool_vec[*m] {
+                for r in m_vec.iter() {
+                    let c = mm * r;
+                    if c > n {
+                        break;
+                    } else {
+                        bool_vec[c] = false;
+                    }
+                }
+            }
         }
     }
 
-    unimplemented!()
+    let true_indices = bool_vec
+        .into_iter()
+        .enumerate()
+        .filter_map(|(i, b)| if b { Some(i) } else { None })
+        .collect::<Vec<_>>();
+
+    let mut primes = vec![2, 3, 5];
+    primes.extend(true_indices.iter().copied());
+
+    primes
 }
