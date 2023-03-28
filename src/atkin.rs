@@ -1,3 +1,5 @@
+// I don't think this necessarily works.
+
 pub fn single_thread(n: usize) -> Vec<usize> {
     let comparison_nums = vec![1, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 49, 53, 59];
 
