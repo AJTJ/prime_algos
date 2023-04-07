@@ -1,4 +1,4 @@
-use prime_finder::{atkin, eratosthenes, sundaram};
+use prime_finder::{atkin, eratosthenes, sundaram, thread_support::ThreadPool};
 
 const TEST_NUMBER: usize = 300;
 
